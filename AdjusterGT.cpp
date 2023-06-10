@@ -89,10 +89,7 @@ namespace{
 }
 
 //========================================== Output directry =========================================//
-//string access_route = "/TEST/"; //my computer in domitory
-string ACCESS_ROUTE = "/mnt/data_complex/syncbox/rat_analysis/";  //Ryzen PC
-//string ACCESS_ROUTE = "/mnt/4TBSandisk/rat_analysis/panda18/";  //Ryzen PC/
-//string access_route = "/Users/toyagenta/Dropbox/B03_PopEco/Rat/rat_analysis/";  //Ryzen PC
+string ACCESS_ROUTE = "/mnt/data_complex/syncbox/rat_analysis/";
 //====================================================================================================//
 
 
