@@ -1,9 +1,9 @@
-/*************************************/
-/*                                   */
-/*          AdjusterGT.cpp           */
-/*  Incomplement coordination file   */
-/*                                   */
-/*************************************/
+/*******************************************/
+/*                                         */
+/*             AdjusterGT.cpp              */
+/*  Complementation of coordination file   */
+/*                                         */
+/*******************************************/
 
 /******************** Coding Style in this code *********************/
 /*
@@ -70,7 +70,7 @@ using std::ios_base;
 #define DRLIM 300
 
 namespace{
-  //==== for argument ====//
+  //==== for command line argument ====//
   string TERM;
   string FILENAME;
   string GROUP; // = "panda";
@@ -78,7 +78,7 @@ namespace{
   string PID; // = "B2";
   int CYCLE; // = 100;
   int SAVE_POINT; // = 0
-  //======================//
+  //===================================//
   
   int SKIP = 10000;
   double COMP_THRE = 0.8;
@@ -94,7 +94,6 @@ namespace{
 //========================================== Output directry =========================================//
 string ACCESS_ROUTE = "/mnt/data_complex/syncbox/rat_analysis/";
 //====================================================================================================//
-
 
 
 //================================ csv file input/output ================================//
@@ -200,9 +199,9 @@ int main(int argc, char *argv[]){
     comp.cycle = i+1;
     if(JUMP_SW) comp.coords_mod(coords_data, original_data, csvio, JUMPING);  //modification of jumping outlier
     //if((comp.complement == 0) && (comp.incomplement == 0)) break;
-    if(STAY_SW) comp.coords_mod(coords_data, original_data, csvio, STAYING_PINCH);  //modification of staying outlier
-    if(comp.cycle > CYCLE/2 && PARTS_SW) comp.coords_mod(coords_data, original_data, csvio, OUTPARTS);  //modification of body parts outlier
-    if(STAY_SW) comp.coords_mod(coords_data, original_data, csvio, STAYING_ROLL);  //modification of staying outlier
+    if(STAY_SW) comp.coords_mod(coords_data, original_data, csvio, STAYING_PINCH);  //modification of staying outlier point
+    if(comp.cycle > CYCLE/2 && PARTS_SW) comp.coords_mod(coords_data, original_data, csvio, OUTPARTS);  //modification of body parts outlier point
+    if(STAY_SW) comp.coords_mod(coords_data, original_data, csvio, STAYING_ROLL);  //modification of staying outlier point
     if((i+1)%SKIP == 0) csvio.writing_csv(coords_data, i+1);
     //cout << "==========" << endl;
   }
@@ -236,8 +235,8 @@ void OutlierComp::coords_mod(double **coords_data, double **original_data, CSVio
     fix_num = 0;
     complement = 0, incomplement = 1;
     avelikeli = 0;
-    vclim = VCLIM; //if VCLIM = 30
-    drlim = DRLIM-(200*cycle/CYCLE); //if DRLIM = 300
+    vclim = VCLIM;
+    drlim = DRLIM-(200*cycle/CYCLE);
     while((avelikeli < PRECISION) && (fix_num < fix_max)){
       avelikeli = 0; complement = 0; incomplement = 0;
       for(int f = 0; f < FRAMEMAX; ++f){
@@ -317,7 +316,7 @@ void OutlierComp::jump_detection(int p, int f, double **coords_data){
           integral_v += v*w;
           integral_n += w;
           ++stable;
-        }else if(v < velocity_underlimit[p]){ //static state
+        }else if(v < velocity_underlimit[p]){ //threshold of static state
           integral_v += 1*w;
           integral_n += w;
           ++stable;
@@ -390,7 +389,7 @@ void OutlierComp::jump_correction(int p, int f, double **coords_data, double **o
     if(t == JUMPMOD_WD){
       if(f-JUMPMOD_WD < 0){++incomplement; return;}
 
-      //## velocity complement ##//
+      //## complementation using velocity ##//
       double v, vx, vy, integral_vx = 0, integral_vy = 0; //velocity of rat
       //calc. average velocity
       for(int t = JUMPMOD_WD; t > 0; t--){
@@ -401,7 +400,7 @@ void OutlierComp::jump_correction(int p, int f, double **coords_data, double **o
           if(velocity_underlimit[p] < v < velocity_overlimit[p]){
             integral_vx += vx;
             integral_vy += vy;
-          }else if(v < velocity_underlimit[p]){ //static state
+          }else if(v < velocity_underlimit[p]){
             integral_vx += 0;
             integral_vy += 0;
           }else{
