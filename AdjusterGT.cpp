@@ -70,13 +70,16 @@ using std::ios_base;
 #define DRLIM 300
 
 namespace{
+  //==== for argument ====//
   string TERM;
   string FILENAME;
   string GROUP; // = "panda";
   string DATE; // = "220112";
   string PID; // = "B2";
-  int CYCLE; // = 1000;
+  int CYCLE; // = 100;
   int SAVE_POINT; // = 0
+  //======================//
+  
   int SKIP = 10000;
   double COMP_THRE = 0.8;
 
